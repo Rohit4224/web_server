@@ -20,24 +20,24 @@ func formHandler(w http.ResponseWriter, r *http.Request) {
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/hello" {
-		http.Error(w, "404 not found", http.StatusNotFound)
+		http.Error(w, "404 not found, sorry", http.StatusNotFound)
 		return
 	}
 	if r.Method != "GET" {
 		http.Error(w, "method unsupported", http.StatusNotFound)
 		return
 	}
-	fmt.Fprintf(w, "hello!")
+	fmt.Fprintf(w, "hello 42ers!")
 }
 
 func main() {
 	fileServer := http.FileServer(http.Dir("./static"))
 	http.Handle("/", fileServer)
-	http.HandleFunc("/form", formHandler)
-	http.HandleFunc("/hello", helloHandler)
+	http.HandleFunc("/form", formHandler)   // handling form data submitted via a POST request to the "/form" path
+	http.HandleFunc("/hello", helloHandler) // for handling a GET request to the "/hello" path
 
 	fmt.Println("Starting your server at port 8080")
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":8080", nil) // the ListenAndServe function from the http package to start the server and listen for incoming requests on port 8080
 	if err != nil {
 		log.Fatal(err)
 	}
